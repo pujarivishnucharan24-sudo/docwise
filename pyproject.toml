@@ -1,18 +1,17 @@
 [project]
-name = "docwise"
-version = "0.1.0"
-description = "DocWise Python project"
-readme = "README.md"
-requires-python = ">=3.10"
-license = { text = "AGPL-3.0-only" }
-dependencies = []
+name="docwise"
+version="0.1.0"
+description="DocWise AI project"
+readme="README.md"
+requires-python=">=3.10"
+license={text="AGPL-3.0-only"}
 
 [tool.ruff]
-line-length = 100
+line-length=100
 
 [tool.mypy]
-ignore_missing_imports = true
+ignore_missing_imports=true
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "--cov=. --cov-report=term-missing --cov-fail-under=1"
+testpaths=["tests"]
+addopts="--cov=. --cov-report=term-missing --cov-fail-under=1"

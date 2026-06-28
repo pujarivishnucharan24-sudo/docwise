@@ -1,10 +1,5 @@
-# Feature Specification
-
-## Problem
-Describe the problem.
+# Spec Template
 
 ## Requirements
-Describe requirements.
 
 ## Acceptance Criteria
-Describe verification.

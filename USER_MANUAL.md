@@ -1,15 +1,9 @@
 # User Manual
 
-## DocWise
-
-DocWise is a Python project for document-related workflows.
-
 ## Usage
+
+Run:
 
 ```bash
 python main.py
 ```
-
-## Configuration
-
-Copy `.env.example` to `.env` and update values as needed.

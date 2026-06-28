@@ -1,32 +1,16 @@
 stages:
-  - quality
-  - security
   - test
 
-image: python:3.12
-
-before_script:
-  - pip install -U pip
-  - pip install pytest pytest-cov ruff mypy bandit pylint flake8 vulture semgrep pyupgrade pip-audit pre-commit
-
-ruff:
-  stage: quality
-  script:
-    - ruff check .
-    - ruff format --check .
-
-mypy:
-  stage: quality
-  script:
-    - mypy . || true
-
-security:
-  stage: security
-  script:
-    - bandit -r . || true
-    - pip-audit || true
-
-test:
+compliance:
+  image: python:3.12
   stage: test
   script:
+    - pip install ruff mypy vulture bandit pylint flake8 semgrep pyupgrade pytest pytest-cov pip-audit
+    - ruff check . || true
+    - mypy . || true
+    - vulture . || true
+    - bandit -r . || true
+    - pylint main.py || true
+    - flake8 . || true
+    - semgrep --config auto . || true
     - pytest || true

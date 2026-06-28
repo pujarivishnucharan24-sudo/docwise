@@ -1,7 +1,3 @@
 # Project Constitution
 
-## Principles
-- AGPLv3 license
-- Secure development
-- Tested changes
-- Spec-driven development
+AGPLv3, secure, tested, documented development.
