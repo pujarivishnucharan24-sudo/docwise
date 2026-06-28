@@ -1,70 +1,244 @@
-"""Streamlit interface for DocWise AI."""
-
-from __future__ import annotations
-
-from pathlib import Path
-
 import streamlit as st
+import pandas as pd
+import plotly.express as px
+from PIL import Image
+import pytesseract
+from datetime import datetime
+import re
 
-from database import list_receipts, save_receipt
-from export import export_receipts_to_csv, export_receipts_to_json
-from image_processing import preprocess_image
-from ocr import extract_text_from_pdf, extract_text_from_processed_image
-from parser import parse_receipt_text
+# ---------------------------------------------------
+# PAGE CONFIG
+# ---------------------------------------------------
 
+st.set_page_config(
+    page_title="DocWise AI",
+    page_icon="🚀",
+    layout="wide"
+)
 
-UPLOAD_DIR = Path("uploads")
-REPORT_DIR = Path("reports")
+st.title("🚀 DocWise AI Dashboard")
 
+# ---------------------------------------------------
+# SESSION STATE
+# ---------------------------------------------------
 
-def process_upload(uploaded_file, languages):
-    """Run OCR, parsing, and persistence for one uploaded file."""
-    UPLOAD_DIR.mkdir(exist_ok=True)
-    file_path = UPLOAD_DIR / uploaded_file.name
-    file_path.write_bytes(uploaded_file.getbuffer())
+if "receipts" not in st.session_state:
+    st.session_state.receipts = []
 
-    if file_path.suffix.lower() == ".pdf":
-        text = extract_text_from_pdf(file_path, languages=languages)
-    else:
-        processed_image = preprocess_image(str(file_path))
-        text = extract_text_from_processed_image(processed_image, languages=languages)
+# ---------------------------------------------------
+# DASHBOARD METRICS
+# ---------------------------------------------------
 
-    receipt = parse_receipt_text(text)
-    receipt_id = save_receipt(receipt)
-    receipt["id"] = receipt_id
-    return receipt
+total_expenses = sum(
+    r["Amount"] for r in st.session_state.receipts
+)
 
+receipt_count = len(st.session_state.receipts)
 
-def main():
-    """Render the DocWise AI Streamlit app."""
-    st.set_page_config(page_title="DocWise AI", layout="wide")
-    st.title("DocWise AI")
+merchant_count = len(
+    set(r["Merchant"] for r in st.session_state.receipts)
+)
 
-    languages = st.text_input("Tesseract languages", value="eng")
+gst_saved = sum(
+    r["GST"] for r in st.session_state.receipts
+)
+
+c1, c2, c3, c4 = st.columns(4)
+
+c1.metric("💰 Total Expenses", f"₹{total_expenses:.2f}")
+c2.metric("🧾 Receipts", receipt_count)
+c3.metric("🏪 Merchants", merchant_count)
+c4.metric("📊 GST Saved", f"₹{gst_saved:.2f}")
+
+st.divider()
+
+# ---------------------------------------------------
+# OCR FUNCTION
+# ---------------------------------------------------
+
+def process_receipt(uploaded_file):
+
+    image = Image.open(uploaded_file)
+
+    text = pytesseract.image_to_string(image)
+
+    lines = [line.strip() for line in text.split("\n") if line.strip()]
+
+    merchant = lines[0] if lines else "Unknown Merchant"
+
+    amount = 0
+
+    amounts = re.findall(r'\d+\.\d{2}', text)
+
+    if amounts:
+        try:
+            amount = max([float(x) for x in amounts])
+        except:
+            amount = 0
+
+    return merchant, amount, text
+
+# ---------------------------------------------------
+# FILE UPLOAD + BUTTON
+# ---------------------------------------------------
+
+col1, col2 = st.columns([5, 1])
+
+with col1:
     uploaded_file = st.file_uploader(
-        "Upload receipt image or PDF",
-        type=["png", "jpg", "jpeg", "pdf"],
+        "📤 Upload Receipt",
+        type=["png", "jpg", "jpeg"]
     )
 
-    if uploaded_file and st.button("Process receipt"):
-        receipt = process_upload(uploaded_file, languages)
-        st.success(f"Saved receipt #{receipt['id']}")
-        st.json(receipt)
+with col2:
+    st.write("")
+    st.write("")
+    process_btn = st.button(
+        "🚀 Process",
+        use_container_width=True
+    )
 
-    receipts = list_receipts()
-    st.subheader("Stored expenses")
-    st.dataframe(receipts, use_container_width=True)
+# ---------------------------------------------------
+# PROCESS RECEIPT
+# ---------------------------------------------------
 
-    col_csv, col_json = st.columns(2)
-    with col_csv:
-        if st.button("Export CSV"):
-            output_path = export_receipts_to_csv(receipts, REPORT_DIR / "receipts.csv")
-            st.success(f"Exported {output_path}")
-    with col_json:
-        if st.button("Export JSON"):
-            output_path = export_receipts_to_json(receipts, REPORT_DIR / "receipts.json")
-            st.success(f"Exported {output_path}")
+if process_btn:
 
+    if uploaded_file is None:
 
-if __name__ == "__main__":
-    main()
+        st.warning("Please upload a receipt first.")
+
+    else:
+
+        with st.spinner("Processing receipt..."):
+
+            merchant, amount, text = process_receipt(uploaded_file)
+
+            now = datetime.now()
+
+            gst = round(amount * 0.18, 2)
+
+            receipt = {
+
+                "Receipt ID":
+                len(st.session_state.receipts) + 1,
+
+                "File Name":
+                uploaded_file.name,
+
+                "Merchant":
+                merchant,
+
+                "Amount":
+                amount,
+
+                "GST":
+                gst,
+
+                "Date":
+                now.strftime("%d-%m-%Y"),
+
+                "Time":
+                now.strftime("%H:%M:%S"),
+
+                "Day":
+                now.strftime("%A"),
+
+                "Month":
+                now.strftime("%B"),
+
+                "Year":
+                now.strftime("%Y"),
+
+                "File Size (KB)":
+                round(uploaded_file.size / 1024, 2),
+
+                "Raw OCR Text":
+                text
+            }
+
+            st.session_state.receipts.append(receipt)
+
+            st.success("✅ Receipt processed and saved!")
+
+            st.subheader("📄 OCR Extracted Text")
+
+            st.text_area(
+                "Receipt Text",
+                text,
+                height=250
+            )
+
+# ---------------------------------------------------
+# DISPLAY DATA
+# ---------------------------------------------------
+
+if len(st.session_state.receipts) > 0:
+
+    df = pd.DataFrame(st.session_state.receipts)
+
+    st.divider()
+
+    st.subheader("📊 Expenses Breakdown")
+
+    fig = px.pie(
+        df,
+        names="Merchant",
+        values="Amount",
+        hole=0.4
+    )
+
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
+
+    st.subheader("🧾 Saved Receipts")
+
+    st.dataframe(
+        df,
+        use_container_width=True,
+        hide_index=True
+    )
+
+    # ---------------------------------------------------
+    # EXPORT BUTTONS
+    # ---------------------------------------------------
+
+    st.markdown("---")
+    st.subheader("📥 Export Receipt Data")
+
+    export_col1, export_col2 = st.columns(2)
+
+    with export_col1:
+
+        csv_data = df.to_csv(
+            index=False
+        ).encode("utf-8")
+
+        st.download_button(
+            label="⬇️ Download CSV",
+            data=csv_data,
+            file_name="docwise_receipts.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
+
+    with export_col2:
+
+        json_data = df.to_json(
+            orient="records",
+            indent=4
+        )
+
+        st.download_button(
+            label="⬇️ Download JSON",
+            data=json_data,
+            file_name="docwise_receipts.json",
+            mime="application/json",
+            use_container_width=True
+        )
+
+else:
+
+    st.info("No receipts processed yet.")
