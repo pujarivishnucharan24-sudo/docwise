@@ -1,3 +1,8 @@
-# AGENTS.md
+# AGENTS
 
-AI agents must follow project rules, avoid secrets, and run tests.
+This project supports AI-assisted document processing.
+
+## Responsibilities
+- Process documents
+- Automate workflows
+- Protect sensitive data
