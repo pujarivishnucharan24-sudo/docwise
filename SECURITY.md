@@ -1,3 +1,3 @@
 # Security Policy
 
-Report security issues privately.
+Please report vulnerabilities responsibly. Do not publish secrets or private data.

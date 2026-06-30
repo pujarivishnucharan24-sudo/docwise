@@ -1,16 +1,29 @@
 stages:
+  - quality
   - test
+  - security
 
-compliance:
+quality:
+  image: python:3.12
+  stage: quality
+  script:
+    - pip install -r requirements.txt
+    - ruff check .
+    - mypy . || true
+    - flake8 . || true
+    - pylint **/*.py || true
+
+test:
   image: python:3.12
   stage: test
   script:
-    - pip install ruff mypy vulture bandit pylint flake8 semgrep pyupgrade pytest pytest-cov pip-audit
-    - ruff check . || true
-    - mypy . || true
-    - vulture . || true
+    - pip install -r requirements.txt
+    - pytest --cov=. --cov-report=term-missing --cov-fail-under=50
+
+security:
+  image: python:3.12
+  stage: security
+  script:
+    - pip install -r requirements.txt
     - bandit -r . || true
-    - pylint main.py || true
-    - flake8 . || true
-    - semgrep --config auto . || true
-    - pytest || true
+    - pip-audit || true

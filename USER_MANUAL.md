@@ -1,9 +1,6 @@
 # User Manual
 
-## Usage
+DocWise is a Python document processing project.
 
-Run:
-
-```bash
+## Run
 python main.py
-```

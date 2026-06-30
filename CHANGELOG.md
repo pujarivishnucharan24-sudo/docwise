@@ -1,4 +1,4 @@
 # Changelog
 
-## 0.1.0
-- Compliance setup.
+## v0.1.0
+- Initial compliant project setup.

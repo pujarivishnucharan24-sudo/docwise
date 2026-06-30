@@ -1,17 +1,14 @@
-[project]
-name="docwise"
-version="0.1.0"
-description="DocWise AI project"
-readme="README.md"
-requires-python=">=3.10"
-license={text="AGPL-3.0-only"}
-
 [tool.ruff]
-line-length=100
+line-length = 88
+target-version = "py312"
 
 [tool.mypy]
-ignore_missing_imports=true
+python_version = "3.12"
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-testpaths=["tests"]
-addopts="--cov=. --cov-report=term-missing --cov-fail-under=1"
+testpaths = ["tests"]
+addopts = "--cov=. --cov-report=term-missing --cov-fail-under=50"
+
+[tool.coverage.run]
+omit = ["tests/*", "venv/*", ".venv/*"]

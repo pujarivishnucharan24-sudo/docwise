@@ -1,3 +1,3 @@
-# Project Constitution
+# Constitution
 
-AGPLv3, secure, tested, documented development.
+DocWise follows spec-driven development, security-first design, and maintainable engineering practices.

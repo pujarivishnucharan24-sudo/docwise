@@ -1,3 +1,3 @@
 # Code of Conduct
 
-Be respectful and professional.
+Be respectful, professional, and inclusive in all project interactions.

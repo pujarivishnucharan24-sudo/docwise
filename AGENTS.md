@@ -1,8 +1,3 @@
-# AGENTS
+# Agents
 
-This project supports AI-assisted document processing.
-
-## Responsibilities
-- Process documents
-- Automate workflows
-- Protect sensitive data
+AI agents in this project help with document processing, automation, and safe workflows.

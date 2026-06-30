@@ -3,12 +3,4 @@
 Thank you for contributing to DocWise.
 
 ## Setup
-- Install Python
-- Install dependencies
-- Run the project
-
-## Rules
-- Follow coding standards.
-- Test your changes.
-- Create a Merge Request.
-Thank you for contributing to DocWise.
+Install dependencies, create a branch, make changes, run checks, and open a merge request.
