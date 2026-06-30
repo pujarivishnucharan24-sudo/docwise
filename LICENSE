@@ -1,21 +1,4 @@
 GNU AFFERO GENERAL PUBLIC LICENSE
 Version 3, 19 November 2007
 
-Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
-
-Everyone is permitted to copy and distribute verbatim copies of this license
-document, but changing it is not allowed.
-
-This project is licensed under the GNU Affero General Public License version 3
-or, at your option, any later version.
-
-SPDX-License-Identifier: AGPL-3.0-or-later
-
-The complete AGPLv3 license text is available from the Free Software Foundation:
-https://www.gnu.org/licenses/agpl-3.0.html
-
-Source code recipients may use, modify, and redistribute this project under the
-terms of the GNU Affero General Public License version 3 or later. If you modify
-the Program and run a modified version to interact with users remotely through a
-computer network, you must offer those users an opportunity to receive the
-Corresponding Source for your modified version as required by AGPLv3 section 13.
+This project is licensed under the GNU Affero General Public License v3.0.
