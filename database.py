@@ -6,7 +6,6 @@ import json
 import sqlite3
 from pathlib import Path
 
-
 DEFAULT_DB_PATH = "docwise.db"
 
 
@@ -21,8 +20,7 @@ def get_connection(db_path=DEFAULT_DB_PATH):
 def initialize_database(db_path=DEFAULT_DB_PATH):
     """Create the receipts table if it does not exist."""
     with get_connection(db_path) as connection:
-        connection.execute(
-            """
+        connection.execute("""
             CREATE TABLE IF NOT EXISTS receipts (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 merchant_name TEXT,
@@ -33,8 +31,7 @@ def initialize_database(db_path=DEFAULT_DB_PATH):
                 raw_text TEXT,
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP
             )
-            """
-        )
+            """)
 
 
 def save_receipt(receipt, db_path=DEFAULT_DB_PATH):

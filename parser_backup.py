@@ -5,7 +5,6 @@ from __future__ import annotations
 import re
 from datetime import datetime
 
-
 DATE_PATTERNS = (
     r"\b\d{1,2}[-/]\d{1,2}[-/]\d{2,4}\b",
     r"\b\d{4}[-/]\d{1,2}[-/]\d{1,2}\b",

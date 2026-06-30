@@ -1,6 +1,11 @@
 # User Manual
 
-DocWise is a Python Streamlit document processing app.
+## Running the Project
 
-## Run
-streamlit run app.py
+python main.py
+
+## Requirements
+- Python
+- Project dependencies
+
+Follow the on-screen instructions after starting the application.

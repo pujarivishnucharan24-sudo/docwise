@@ -1,27 +1,30 @@
+/* Background */
 body {
     background: linear-gradient(135deg, #eef2ff, #f8fafc);
 }
 
+/* Cards */
 .card {
     padding: 20px;
     border-radius: 15px;
     background: white;
     box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    text-align: center;
 }
 
+/* Buttons */
+.stButton>button {
+    background: linear-gradient(90deg, #6366f1, #a855f7);
+    color: white;
+    border-radius: 10px;
+    height: 45px;
+    font-weight: 600;
+}
+
+/* Upload box */
 .upload-box {
     border: 2px dashed #a5b4fc;
     padding: 30px;
     border-radius: 15px;
     text-align: center;
     background: #f8fafc;
-    margin-bottom: 20px;
-}
-
-.stButton>button {
-    background: linear-gradient(90deg, #6366f1, #a855f7);
-    color: white;
-    border-radius: 10px;
-    height: 45px;
 }
