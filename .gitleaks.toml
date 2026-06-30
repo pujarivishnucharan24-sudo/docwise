@@ -1,0 +1,9 @@
+title = "DocWise Gitleaks Configuration"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Documented development placeholders"
+paths = ['''^\.env\.example$''']
+regexes = ['''replace-with-a-local-development-value''']

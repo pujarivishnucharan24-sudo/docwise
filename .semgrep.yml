@@ -1,0 +1,20 @@
+rules:
+  - id: python-dangerous-eval
+    languages: [python]
+    severity: ERROR
+    message: Avoid eval or exec on untrusted input.
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: exec(...)
+
+  - id: python-hardcoded-bind-all
+    languages: [python]
+    severity: WARNING
+    message: Binding services to all interfaces should be explicit and reviewed.
+    pattern: $APP.run(..., host="0.0.0.0", ...)
+
+  - id: python-shell-true
+    languages: [python]
+    severity: ERROR
+    message: Avoid shell=True unless the command is constant and fully reviewed.
+    pattern: subprocess.$FUNC(..., shell=True, ...)
