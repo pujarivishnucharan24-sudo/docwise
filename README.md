@@ -88,8 +88,11 @@ Build and run the project image:
 
 ```bash
 docker build -t docwise .
-docker run --rm docwise
+docker run --rm -p 8501:8501 docwise
 ```
+
+The container starts the Streamlit dashboard on `0.0.0.0` and uses the `PORT`
+environment variable when one is supplied by a platform such as Render.
 
 ## Spec-Driven Development
 

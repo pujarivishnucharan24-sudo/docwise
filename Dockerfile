@@ -17,4 +17,4 @@ RUN python -m pip install --upgrade pip \
 COPY . .
 
 EXPOSE 8501
-CMD ["python", "main.py"]
+CMD ["sh", "-c", "streamlit run app.py --server.address=0.0.0.0 --server.port=${PORT:-8501} --server.headless=true"]
